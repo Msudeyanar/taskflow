@@ -284,7 +284,7 @@ export function DashboardHeader() {
           </button>
 
           {showFilters && (
-            <div className="absolute top-12 -right-2 w-[85vw] sm:w-64 bg-white border border-slate-200 rounded-xl shadow-2xl z-[60] p-4 animate-in fade-in slide-in-from-top-2 origin-top-right">
+            <div className="fixed sm:absolute top-16 sm:top-12 left-4 right-4 sm:left-auto sm:-right-2 sm:w-64 bg-white border border-slate-200 rounded-xl shadow-2xl z-[100] p-4 animate-in fade-in slide-in-from-top-2 origin-top sm:origin-top-right">
               <div className="flex justify-between items-center mb-3">
                 <h3 className="font-semibold text-sm text-slate-800">Gelişmiş Filtreler</h3>
                 {filterCount > 0 && (
@@ -388,7 +388,7 @@ export function DashboardHeader() {
 
             {/* Takım Paneli */}
             {showTeamPanel && (
-              <div className="absolute -right-2 top-12 w-[85vw] sm:w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[60] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 origin-top-right">
+              <div className="fixed sm:absolute top-16 sm:top-12 left-4 right-4 sm:left-auto sm:-right-2 sm:w-80 bg-white border border-slate-200 rounded-2xl shadow-2xl z-[100] overflow-hidden animate-in fade-in slide-in-from-top-2 duration-200 origin-top sm:origin-top-right">
                 {/* Giriş yapan kullanıcı */}
                 <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-slate-100">
                   <div className="flex items-center gap-3">
