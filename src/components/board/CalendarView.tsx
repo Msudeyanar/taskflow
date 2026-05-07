@@ -42,9 +42,9 @@ export function CalendarView() {
     : []
 
   return (
-    <div className="flex-1 p-6 flex gap-8 overflow-y-auto bg-slate-50">
+    <div className="flex-1 p-3 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-8 overflow-y-auto bg-slate-50">
       {/* Sol taraf: Takvim */}
-      <div className="w-[350px] shrink-0 bg-white p-4 rounded-xl border border-slate-200 shadow-sm h-fit">
+      <div className="w-full sm:w-[350px] shrink-0 bg-white p-4 rounded-xl border border-slate-200 shadow-sm h-fit">
         <h2 className="font-semibold text-slate-800 mb-4 px-2">Teslim Tarihleri Takvimi</h2>
         <Calendar
           mode="single"
