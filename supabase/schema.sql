@@ -90,7 +90,7 @@ CREATE TABLE activities (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- 4. RLS AKTİF ET
+-- 4. RLS AKTİF ET (KRİTİK GÜVENLİK ADIMI)
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
 ALTER TABLE teams ENABLE ROW LEVEL SECURITY;
 ALTER TABLE team_members ENABLE ROW LEVEL SECURITY;
@@ -112,44 +112,50 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
-CREATE OR REPLACE FUNCTION has_board_access(b_id UUID)
-RETURNS BOOLEAN AS $$
-BEGIN
-  RETURN EXISTS (
-    SELECT 1 FROM boards
-    WHERE id = b_id AND (
-      (team_id IS NULL AND user_id = auth.uid())
-      OR 
-      (team_id IS NOT NULL AND team_id IN (SELECT team_id FROM team_members WHERE user_id = auth.uid()))
-    )
-  );
-END;
-$$ LANGUAGE plpgsql SECURITY DEFINER;
-
--- 6. POLİTİKALAR (RLS)
+-- 6. POLİTİKALAR (RLS) - KATILAŞTIRILMIŞ GÜVENLİK
+DROP POLICY IF EXISTS "Users can view profiles" ON profiles;
 CREATE POLICY "Users can view profiles" ON profiles FOR SELECT TO authenticated USING (true);
+
+DROP POLICY IF EXISTS "Users can update own profile" ON profiles;
 CREATE POLICY "Users can update own profile" ON profiles FOR UPDATE USING (auth.uid() = id);
 
+DROP POLICY IF EXISTS "Users can view own teams" ON teams;
 CREATE POLICY "Users can view own teams" ON teams FOR SELECT USING (is_team_member(id));
+
+DROP POLICY IF EXISTS "Users can view team members" ON team_members;
 CREATE POLICY "Users can view team members" ON team_members FOR SELECT USING (is_team_member(team_id));
 
+DROP POLICY IF EXISTS "Boards Access Policy" ON boards;
 CREATE POLICY "Boards Access Policy" ON boards FOR SELECT USING (
-  (team_id IS NULL AND auth.uid() = user_id) OR (team_id IS NOT NULL AND is_team_member(team_id))
+  (user_id = auth.uid()) OR 
+  (team_id IS NOT NULL AND is_team_member(team_id))
 );
+
+DROP POLICY IF EXISTS "Users can create boards" ON boards;
 CREATE POLICY "Users can create boards" ON boards FOR INSERT WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY "Users can view columns" ON columns FOR SELECT USING (has_board_access(board_id));
-CREATE POLICY "Users can manage columns" ON columns FOR ALL USING (has_board_access(board_id));
+DROP POLICY IF EXISTS "Users can view columns" ON columns;
+CREATE POLICY "Users can view columns" ON columns FOR SELECT USING (
+  EXISTS (SELECT 1 FROM boards WHERE id = columns.board_id AND (user_id = auth.uid() OR (team_id IS NOT NULL AND is_team_member(team_id))))
+);
 
+DROP POLICY IF EXISTS "Users can view cards" ON cards;
 CREATE POLICY "Users can view cards" ON cards FOR SELECT USING (
-  EXISTS (SELECT 1 FROM columns WHERE id = cards.column_id AND has_board_access(board_id))
-);
-CREATE POLICY "Users can manage cards" ON cards FOR ALL USING (
-  EXISTS (SELECT 1 FROM columns WHERE id = cards.column_id AND has_board_access(board_id))
+  EXISTS (
+    SELECT 1 FROM columns 
+    JOIN boards ON boards.id = columns.board_id 
+    WHERE columns.id = cards.column_id AND (
+      boards.user_id = auth.uid() OR 
+      (boards.team_id IS NOT NULL AND is_team_member(boards.team_id))
+    )
+  )
 );
 
-CREATE POLICY "Users can view labels" ON labels FOR SELECT USING (has_board_access(board_id));
-CREATE POLICY "Users can manage labels" ON labels FOR ALL USING (has_board_access(board_id));
+-- Genel yönetim izinleri
+CREATE POLICY "Users can manage own columns" ON columns FOR ALL USING (
+  EXISTS (SELECT 1 FROM boards WHERE id = columns.board_id AND user_id = auth.uid())
+);
 
-CREATE POLICY "Users can view activities" ON activities FOR SELECT USING (has_board_access(board_id));
-CREATE POLICY "Users can create activities" ON activities FOR INSERT WITH CHECK (has_board_access(board_id));
+CREATE POLICY "Users can manage own cards" ON cards FOR ALL USING (
+  EXISTS (SELECT 1 FROM columns JOIN boards ON boards.id = columns.board_id WHERE columns.id = cards.column_id AND boards.user_id = auth.uid())
+);
