@@ -51,6 +51,7 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
   }, [])
 
   const [selectedLabels, setSelectedLabels] = React.useState<{ id: string; board_id: string; name: string; color: string }[]>([])
+  const dateInputRef = React.useRef<HTMLInputElement>(null)
 
   // Card değiştiğinde state'leri güncelle
   React.useEffect(() => {
@@ -67,11 +68,15 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
   if (!card) return null
 
   const handleSave = () => {
+    // iOS Safari native takvim 'Sıfırla' butonu bazen onChange tetiklemiyor.
+    // Bu yüzden kaydederken doğrudan DOM elementindeki en güncel değeri okuyoruz.
+    const finalDate = dateInputRef.current ? dateInputRef.current.value : dueDate;
+    
     updateCard(card.id, { 
       title, 
       description, 
       priority, 
-      due_date: dueDate || null, 
+      due_date: finalDate || null, 
       assignee,
       labels: selectedLabels 
     })
@@ -160,6 +165,7 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
             <div>
               <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-2 block">Teslim Tarihi</label>
               <input
+                ref={dateInputRef}
                 type="date"
                 value={dueDate || ''}
                 onChange={(e) => setDueDate(e.target.value)}
