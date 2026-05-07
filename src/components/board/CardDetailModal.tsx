@@ -163,6 +163,7 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
                 type="date"
                 value={dueDate || ''}
                 onChange={(e) => setDueDate(e.target.value)}
+                onBlur={(e) => setDueDate(e.target.value)}
                 className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm outline-none focus:border-blue-400 font-medium shadow-sm"
               />
             </div>
