@@ -163,12 +163,28 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
 
             {/* Teslim Tarihi */}
             <div>
-              <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-2 block">Teslim Tarihi</label>
+              <div className="flex justify-between items-center mb-2">
+                <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold block">Teslim Tarihi</label>
+                {(card.due_date || (dateInputRef.current && dateInputRef.current.value)) && (
+                  <button 
+                    onClick={() => {
+                      if (dateInputRef.current) dateInputRef.current.value = '';
+                      // Force a tiny re-render just to hide the button if needed
+                      setDueDate('');
+                    }} 
+                    className="text-[10px] text-red-500 font-semibold hover:text-red-700 hover:underline px-1"
+                    title="Tarihi Sıfırla"
+                  >
+                    Sıfırla
+                  </button>
+                )}
+              </div>
               <input
                 key={`date-${card.id}`}
                 ref={dateInputRef}
                 type="date"
                 defaultValue={card.due_date ? new Date(card.due_date).toISOString().split('T')[0] : ''}
+                onChange={(e) => setDueDate(e.target.value)}
                 className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm outline-none focus:border-blue-400 font-medium shadow-sm"
               />
             </div>
