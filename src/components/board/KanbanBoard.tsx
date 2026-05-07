@@ -164,6 +164,7 @@ export function KanbanBoard() {
           const nextPos = toCol.cards[newIndex + 1]?.position || null
           
           try {
+            if (prevPos && nextPos && prevPos >= nextPos) throw new Error("Invalid bounds");
             const newPos = generateKeyBetween(prevPos, nextPos)
             toCol.cards[newIndex].position = newPos
 
@@ -173,7 +174,15 @@ export function KanbanBoard() {
               position: newPos 
             }).eq('id', card.id)
           } catch (error) {
-            console.error("Position generation error:", error)
+            console.error("Position generation error, self-healing column:", error)
+            // Eğer fractional indexing hata verirse (örneğin a0 >= a0), tüm sütunu yeniden diz
+            try {
+              const newKeys = generateNKeysBetween(null, null, toCol.cards.length)
+              toCol.cards.forEach((c, i) => {
+                c.position = newKeys[i]
+                supabase.from('cards').update({ position: newKeys[i] }).eq('id', c.id)
+              })
+            } catch(e) {}
           }
         }
         return prev
@@ -195,18 +204,30 @@ export function KanbanBoard() {
       setBoard((prev) => {
         const activeColIndex = prev.columns.findIndex((c) => c.id === activeId)
         const overColIndex = prev.columns.findIndex((c) => c.id === overId)
+        if (activeColIndex === overColIndex || overColIndex === -1) return prev
+
         const newColumns = arrayMove(prev.columns, activeColIndex, overColIndex)
         
-        // Sütun pozisyonlarını yeniden hesapla ve DB'ye kaydet
-        newColumns.forEach((col, i) => {
+        // Sadece taşınan sütunun pozisyonunu yeniden hesapla
+        try {
+          const prevPos = newColumns[overColIndex - 1]?.position || null
+          const nextPos = newColumns[overColIndex + 1]?.position || null
+          
+          if (prevPos && nextPos && prevPos >= nextPos) throw new Error("Invalid bounds");
+          newColumns[overColIndex].position = generateKeyBetween(prevPos, nextPos)
+          
+          supabase.from('columns').update({ position: newColumns[overColIndex].position }).eq('id', newColumns[overColIndex].id)
+        } catch (error) {
+          console.error("Column position error, self-healing all columns:", error)
+          // Hata durumunda tüm sütunları yeniden diz
           try {
-            const prevPos = newColumns[i - 1]?.position || null
-            const nextPos = newColumns[i + 1]?.position || null
-            col.position = generateKeyBetween(prevPos, nextPos)
-            
-            supabase.from('columns').update({ position: col.position }).eq('id', col.id)
-          } catch {}
-        })
+            const newKeys = generateNKeysBetween(null, null, newColumns.length)
+            newColumns.forEach((col, i) => {
+              col.position = newKeys[i]
+              supabase.from('columns').update({ position: newKeys[i] }).eq('id', col.id)
+            })
+          } catch(e) {}
+        }
         
         return { ...prev, columns: newColumns }
       })

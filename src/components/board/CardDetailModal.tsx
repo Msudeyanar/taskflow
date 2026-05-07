@@ -50,6 +50,8 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
     } catch { }
   }, [])
 
+  const [selectedLabels, setSelectedLabels] = React.useState<{ id: string; board_id: string; name: string; color: string }[]>([])
+
   // Card değiştiğinde state'leri güncelle
   React.useEffect(() => {
     if (card) {
@@ -58,13 +60,21 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
       setPriority(card.priority || 'none')
       setDueDate(card.due_date || '')
       setAssignee(card.assignee || null)
+      setSelectedLabels(card.labels || [])
     }
   }, [card])
 
   if (!card) return null
 
   const handleSave = () => {
-    updateCard(card.id, { title, description, priority, due_date: dueDate || null, assignee })
+    updateCard(card.id, { 
+      title, 
+      description, 
+      priority, 
+      due_date: dueDate || null, 
+      assignee,
+      labels: selectedLabels 
+    })
     onClose()
   }
 
@@ -74,17 +84,11 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
   }
 
   const toggleLabel = (label: { name: string; color: string }) => {
-    const currentLabels = card.labels || []
-    const exists = currentLabels.find(l => l.name === label.name)
-
+    const exists = selectedLabels.find(l => l.name === label.name)
     if (exists) {
-      updateCard(card.id, {
-        labels: currentLabels.filter(l => l.name !== label.name)
-      })
+      setSelectedLabels(selectedLabels.filter(l => l.name !== label.name))
     } else {
-      updateCard(card.id, {
-        labels: [...currentLabels, { id: `l-${Date.now()}`, board_id: 'board-1', name: label.name, color: label.color }]
-      })
+      setSelectedLabels([...selectedLabels, { id: `l-${Date.now()}`, board_id: 'board-1', name: label.name, color: label.color }])
     }
   }
 
@@ -157,7 +161,7 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
               <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-2 block">Teslim Tarihi</label>
               <input
                 type="date"
-                value={dueDate}
+                value={dueDate || ''}
                 onChange={(e) => setDueDate(e.target.value)}
                 className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm outline-none focus:border-blue-400 font-medium shadow-sm"
               />
@@ -194,8 +198,8 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
                   className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm text-left font-medium text-slate-600 hover:border-blue-400 focus:outline-none shadow-sm flex items-center justify-between"
                 >
                   <span className="whitespace-nowrap overflow-hidden text-ellipsis">
-                    {card.labels && card.labels.length > 0
-                      ? `${card.labels.length} Etiket Seçili`
+                    {selectedLabels.length > 0
+                      ? `${selectedLabels.length} Etiket Seçili`
                       : 'Etiket Seç...'}
                   </span>
                   <TagIcon className="w-3.5 h-3.5 text-slate-400" />
@@ -211,7 +215,7 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
                     </div>
                     <div className="flex flex-wrap gap-1.5">
                       {AVAILABLE_LABELS.map(label => {
-                        const isActive = card.labels?.some(l => l.name === label.name)
+                        const isActive = selectedLabels.some(l => l.name === label.name)
                         return (
                           <button
                             key={label.name}
@@ -231,9 +235,9 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
                 )}
               </div>
               {/* Seçili Etiketleri Göster */}
-              {card.labels && card.labels.length > 0 && (
+              {selectedLabels.length > 0 && (
                 <div className="flex flex-wrap gap-1 mt-2">
-                  {card.labels.map(label => (
+                  {selectedLabels.map(label => (
                     <Badge
                       key={label.id}
                       className="cursor-pointer hover:opacity-80 transition-opacity text-white text-[9px] px-1.5 py-0 shadow-sm"

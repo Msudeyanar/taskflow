@@ -155,8 +155,16 @@ export function BoardProvider({ children }: { children: React.ReactNode }) {
         const { data: { session } } = await supabase.auth.getSession()
         
         if (session) {
-          const { data: boardData } = await supabase.from('boards').select('*').eq('id', boardId).single()
+          const { data: boardData, error } = await supabase.from('boards').select('*').eq('id', boardId).single()
           
+          if (error && error.code === 'PGRST116') {
+            // RLS engelledi veya pano yok. LocalStorage'a düşmesine izin verme!
+            setBoard(emptyBoard)
+            setLoading(false)
+            setIsLoaded(true)
+            return
+          }
+
           if (boardData) {
             const { data: columnsData } = await supabase.from('columns').select('*').eq('board_id', boardId).order('position')
             const colIds = (columnsData || []).map(c => c.id)
