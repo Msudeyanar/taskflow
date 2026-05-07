@@ -30,7 +30,7 @@ import { CardDetailModal } from './CardDetailModal'
 import { CardWithLabels, ColumnWithCards } from '@/types'
 import { createClient } from '@/lib/supabase/client'
 import { PlusIcon, SearchXIcon } from 'lucide-react'
-import { generateKeyBetween } from 'fractional-indexing'
+import { generateKeyBetween, generateNKeysBetween } from 'fractional-indexing'
 
 export function KanbanBoard() {
   const { board, filteredBoard, setBoard, addColumn, loading, searchQuery, filterPriority, filterDate, filterLabel } = useBoard()
