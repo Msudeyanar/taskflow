@@ -256,7 +256,7 @@ export function DashboardHeader() {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-end min-w-0 ml-2">
+      <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-end min-w-0 ml-4 sm:ml-6">
         {/* Search & Filters */}
         <div className="flex items-center gap-1.5 sm:gap-2 flex-1 max-w-[400px] min-w-0 justify-end relative">
           <div className="relative flex-1 max-w-[300px] min-w-[100px]">
