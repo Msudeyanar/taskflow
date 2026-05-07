@@ -165,11 +165,10 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
             <div>
               <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-2 block">Teslim Tarihi</label>
               <input
+                key={`date-${card.id}`}
                 ref={dateInputRef}
                 type="date"
-                value={dueDate || ''}
-                onChange={(e) => setDueDate(e.target.value)}
-                onBlur={(e) => setDueDate(e.target.value)}
+                defaultValue={card.due_date ? new Date(card.due_date).toISOString().split('T')[0] : ''}
                 className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm outline-none focus:border-blue-400 font-medium shadow-sm"
               />
             </div>
