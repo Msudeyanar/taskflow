@@ -242,7 +242,7 @@ export function DashboardHeader() {
         <div className="h-6 w-px bg-slate-200 hidden sm:block" />
 
         {/* Board Title & Progress */}
-        <div className="flex flex-col min-w-0">
+        <div className="flex flex-col min-w-0 hidden sm:flex">
           <h1 className="font-semibold text-slate-700 leading-tight truncate hidden md:block">{board.title}</h1>
           <div className="flex items-center gap-2 mt-0.5 sm:mt-1">
             <div className="h-1.5 w-16 sm:w-32 bg-slate-100 rounded-full overflow-hidden shrink-0">
@@ -258,7 +258,7 @@ export function DashboardHeader() {
 
       <div className="flex items-center gap-2 sm:gap-4 flex-1 justify-end min-w-0 ml-4 sm:ml-6">
         {/* Search & Filters */}
-        <div className="flex items-center gap-1.5 sm:gap-2 flex-1 max-w-[400px] min-w-0 justify-end relative">
+        <div className="flex items-center gap-1.5 sm:gap-2 flex-1 max-w-[160px] sm:max-w-[400px] min-w-0 justify-end relative">
           <div className="relative flex-1 max-w-[300px] min-w-[100px]">
             <SearchIcon className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
