@@ -51,6 +51,7 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
   }, [])
 
   const [selectedLabels, setSelectedLabels] = React.useState<{ id: string; board_id: string; name: string; color: string }[]>([])
+  const dateInputRef = React.useRef<HTMLInputElement>(null)
 
   // Card değiştiğinde state'leri güncelle
   React.useEffect(() => {
@@ -67,11 +68,15 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
   if (!card) return null
 
   const handleSave = () => {
+    // iOS Safari native takvim 'Sıfırla' butonu bazen onChange tetiklemiyor.
+    // Bu yüzden kaydederken doğrudan DOM elementindeki en güncel değeri okuyoruz.
+    const finalDate = dateInputRef.current ? dateInputRef.current.value : dueDate;
+    
     updateCard(card.id, { 
       title, 
       description, 
       priority, 
-      due_date: dueDate || null, 
+      due_date: finalDate || null, 
       assignee,
       labels: selectedLabels 
     })
@@ -159,23 +164,13 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
             {/* Teslim Tarihi */}
             <div>
               <label className="text-[11px] text-slate-500 uppercase tracking-wider font-bold mb-2 block">Teslim Tarihi</label>
-              <div className="relative">
-                <input
-                  type="date"
-                  value={dueDate || ''}
-                  onChange={(e) => setDueDate(e.target.value)}
-                  className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm outline-none focus:border-blue-400 font-medium shadow-sm pr-10"
-                />
-                {dueDate && (
-                  <button
-                    onClick={(e) => { e.preventDefault(); setDueDate(''); }}
-                    className="absolute right-8 top-1/2 -translate-y-1/2 text-slate-400 hover:text-red-500 bg-white p-1 rounded-full z-10"
-                    title="Tarihi Temizle"
-                  >
-                    <XIcon className="w-3.5 h-3.5" />
-                  </button>
-                )}
-              </div>
+              <input
+                key={`date-${card.id}`}
+                ref={dateInputRef}
+                type="date"
+                defaultValue={card.due_date ? new Date(card.due_date).toISOString().split('T')[0] : ''}
+                className="w-full h-[40px] bg-white border border-slate-200 rounded-lg px-3 text-sm outline-none focus:border-blue-400 font-medium shadow-sm"
+              />
             </div>
 
             {/* Sorumlu */}
