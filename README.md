@@ -51,7 +51,6 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=senin_supabase_anon_key_degerin
 ```bash
 npm run dev
 ```
-Tarayıcınızda [http://localhost:3000](http://localhost:3000) adresine giderek uygulamayı görüntüleyebilirsiniz.
 
 ## Teknik Mimari Kararları (Jüri İçin Notlar)
 
