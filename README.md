@@ -10,7 +10,7 @@ Bu proje, **Hackathon Görev Yönetim Aracı** konsepti doğrultusunda 48 saatli
 ## ✨ Öne Çıkan Özellikler
 
 - **Gelişmiş Sürükle ve Bırak (Drag & Drop):** Hem görev kartlarını (Card) hem de sütunları (Column) dilediğiniz gibi sürükleyip bırakabilirsiniz. Mobil cihazlarla da (touch sensor) tam uyumludur.
-- **O(1) Performanslı Sıralama (Fractional Indexing):** Sürükle-bırak sonrası veritabanında yüzlerce kaydı güncellemek yerine, araya giren kartlara kesirli/alfabetik değerler atanarak (Jira & Trello mantığı) inanılmaz bir performans artışı sağlandı.
+- **O(1) Performanslı Sıralama :** Sürükle-bırak sonrası veritabanında yüzlerce kaydı güncellemek yerine, araya giren kartlara kesirli/alfabetik değerler atanarak (Jira & Trello mantığı) inanılmaz bir performans artışı sağlandı.
 - **Detaylı Görev Yönetimi:** Kartlara Başlık, Açıklama, Öncelik (Düşük/Orta/Yüksek), Sorumlu Kişi, Renkli Etiketler ve Teslim Tarihi eklenebilmektedir.
 - **Takvim Görünümü (Calendar View):** Teslim tarihi girilmiş tüm görevler, özel bir takvim arayüzünde aşamalarına ve renklerine göre görüntülenebilir.
 - **Takım Yönetimi:** Sisteme kayıtlı kullanıcılar e-posta adresleri üzerinden bulunup "Takım Arkadaşı" olarak eklenebilir ve görevlere atanabilir.
