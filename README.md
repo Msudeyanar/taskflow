@@ -1,64 +1,64 @@
-# TaskFlow  - Kanban Proje Yönetim Tahtası
-
-TaskFlow, yazılım ve tasarım ekiplerinin görevlerini kolayca takip edip yönetebilmeleri için geliştirilmiş, Trello benzeri, modern ve yüksek performanslı bir Kanban pano (board) uygulamasıdır. 
+TaskFlow - Kanban Proje Yönetim Tahtası
+TaskFlow, yazılım ve tasarım ekiplerinin görevlerini kolayca takip edip yönetebilmeleri için geliştirilmiş, Trello benzeri, modern ve yüksek performanslı bir Kanban pano (board) uygulamasıdır.
 
 Canlı Proje: https://taskflow-kappa-black.vercel.app
 
-Bu proje, **Hackathon Görev Yönetim Aracı** konsepti doğrultusunda 48 saatlik bir zaman diliminde sıfırdan geliştirilmiştir.
+Bu proje, Hackathon Görev Yönetim Aracı konsepti doğrultusunda 48 saatlik bir zaman diliminde sıfırdan geliştirilmiştir.
 
+✨ Öne Çıkan Özellikler
+Gelişmiş Sürükle ve Bırak (Drag & Drop): Hem görev kartlarını (Card) hem de sütunları (Column) dilediğiniz gibi sürükleyip bırakabilirsiniz. Mobil cihazlarla (touch sensor) tam uyumludur.
 
-## ✨ Öne Çıkan Özellikler
+Performans Odaklı Sıralama: Sürükle-bırak sonrası veritabanı senkronizasyonu optimize edilerek, kullanıcıya bekleme hissi yaşatmadan akıcı bir deneyim sunulur.
 
-- **Gelişmiş Sürükle ve Bırak (Drag & Drop):** Hem görev kartlarını (Card) hem de sütunları (Column) dilediğiniz gibi sürükleyip bırakabilirsiniz. Mobil cihazlarla da (touch sensor) tam uyumludur.
-- **O(1) Performanslı Sıralama :** Sürükle-bırak sonrası veritabanında yüzlerce kaydı güncellemek yerine, araya giren kartlara kesirli/alfabetik değerler atanarak (Jira & Trello mantığı) inanılmaz bir performans artışı sağlandı.
-- **Detaylı Görev Yönetimi:** Kartlara Başlık, Açıklama, Öncelik (Düşük/Orta/Yüksek), Sorumlu Kişi, Renkli Etiketler ve Teslim Tarihi eklenebilmektedir.
-- **Takvim Görünümü (Calendar View):** Teslim tarihi girilmiş tüm görevler, özel bir takvim arayüzünde aşamalarına ve renklerine göre görüntülenebilir.
-- **Takım Yönetimi:** Sisteme kayıtlı kullanıcılar e-posta adresleri üzerinden bulunup "Takım Arkadaşı" olarak eklenebilir ve görevlere atanabilir.
-- **Kimlik Doğrulama (Auth):** Supabase destekli güvenli kayıt ve giriş sistemi.
-- **Offline & Fallback Desteği:** Sunucu bağlantısı kurulamadığında `localStorage` üzerinden çalışmaya devam edebilme (veri kaybını önleme) altyapısı.
+Detaylı Görev Yönetimi: Kartlara Başlık, Açıklama, Öncelik (Düşük/Orta/Yüksek), Sorumlu Kişi, Renkli Etiketler ve Teslim Tarihi eklenebilmektedir.
 
-## 🛠️ Kullanılan Teknolojiler
+Takvim Görünümü (Calendar View): Teslim tarihi girilmiş tüm görevler, özel bir takvim arayüzünde aşamalarına ve renklerine göre görüntülenebilir.
 
-- **Frontend:** Next.js 15 (App Router), React, TypeScript
-- **Stilleme & UI:** Tailwind CSS, Lucide Icons, date-fns, shadcn/ui (temel bileşenler)
-- **Drag & Drop:** `@dnd-kit/core`, `@dnd-kit/sortable`
-- **Backend & Veritabanı:** Supabase (PostgreSQL, Row Level Security, Triggers)
-- **Deployment:** Vercel
+Takım Yönetimi: Sisteme kayıtlı kullanıcılar e-posta adresleri üzerinden bulunup "Takım Arkadaşı" olarak eklenebilir ve görevlere atanabilir.
 
-## 🚀 Kurulum ve Çalıştırma
+Kimlik Doğrulama (Auth): Supabase Auth destekli güvenli kayıt ve giriş sistemi.
 
+Offline & Fallback Desteği: Sunucu bağlantısı kurulamadığında localStorage üzerinden son durumu koruma ve veri kaybını önleme altyapısı.
+
+🛠️ Kullanılan Teknolojiler
+Frontend: Next.js 15 (App Router), React, TypeScript
+
+Stilleme & UI: Tailwind CSS, Lucide Icons, date-fns, shadcn/ui
+
+Drag & Drop: @dnd-kit/core, @dnd-kit/sortable
+
+Backend & Veritabanı: Supabase (PostgreSQL, Row Level Security)
+
+Deployment: Vercel
+
+🚀 Kurulum ve Çalıştırma
 Projeyi bilgisayarınızda yerel olarak çalıştırmak için aşağıdaki adımları izleyin:
 
-### 1. Depoyu Klonlayın
-```bash
+1. Depoyu Klonlayın
+code
+Bash
 git clone https://github.com/KULLANICI_ADIN/taskflow.git
 cd taskflow
-```
-
-### 2. Bağımlılıkları Yükleyin
-```bash
+2. Bağımlılıkları Yükleyin
+code
+Bash
 npm install
-```
+3. Çevresel Değişkenleri Ayarlayın
+Projenin kök dizininde .env.local dosyası oluşturun ve Supabase bilgilerinizi ekleyin:
 
-### 3. Çevresel Değişkenleri (Environment Variables) Ayarlayın
-Projenin kök dizininde `.env.local` adında bir dosya oluşturun ve Supabase bilgilerinizi ekleyin:
-```env
+code
+Env
 NEXT_PUBLIC_SUPABASE_URL=senin_supabase_url_adresin
 NEXT_PUBLIC_SUPABASE_ANON_KEY=senin_supabase_anon_key_degerin
-```
-
-### 4. Geliştirme Sunucusunu Başlatın
-```bash
+4. Geliştirme Sunucusunu Başlatın
+code
+Bash
 npm run dev
-```
+Teknik Mimari Kararları (Jüri İçin Notlar)
+Sürükle Bırak Kütüphanesi: Bakımı durdurulan eski kütüphaneler yerine, modern ve erişilebilir bir yapı sunan @dnd-kit tercih edilmiştir.
 
-## Teknik Mimari Kararları (Jüri İçin Notlar)
+State Yönetimi: Board state'i özel bir hook (useBoard) içerisinde merkezi olarak yönetilmektedir. Optimistic UI yaklaşımı ile sürükleme işlemi bittiği anda veritabanı cevabı beklenmeden arayüz güncellenir.
 
-- **Sürükle Bırak Kütüphanesi:** Bakımı durdurulan `react-beautiful-dnd` yerine güncel ve modern bir React ekosistemi olan `@dnd-kit` tercih edilmiştir. Modüler yapısı sayesinde uygulama boyutu şişirilmemiştir.
-- **State Yönetimi:** Board state'i `useBoard` isimli custom bir hook içerisinde merkezi olarak yönetilmektedir. Supabase verisi ile local state senkronizasyonu optimistik (optimistic UI) güncellemelerle sağlanarak kullanıcıya bekleme hissi yaşatılmaz.
-- **Veritabanı Tasarımı:** `boards` -> `columns` -> `cards` şeklinde 3'lü ilişki (Foreign Key & CASCADE DELETE) kullanılmıştır.
-- **Profil Senkronizasyonu:** Supabase Auth üzerinde yeni kullanıcı kayıt olduğunda, veritabanındaki `profiles` tablosuna otomatik olarak e-posta ve id bilgisini yazan bir "Postgres Trigger" yazılmıştır. Bu sayede kullanıcılar birbirlerini email ile arayabilmektedir.
+Veritabanı Tasarımı: boards -> columns -> cards şeklinde ilişkisel bir yapı kurulmuştur. Silme işlemlerinde CASCADE DELETE kullanılarak veri bütünlüğü korunmuştur.
 
-## 📜 Lisans
-
-Bu proje MIT lisansı ile lisanslanmıştır. Hackathon amaçlı açık kaynak olarak geliştirilmiştir.
+Güvenlik: Supabase üzerinde Row Level Security (RLS) politikaları aktif edilerek, kullanıcıların sadece kendi dahil oldukları panoları görmesi ve düzenlemesi sağlanmıştır.
