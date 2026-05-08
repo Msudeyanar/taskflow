@@ -1,64 +1,64 @@
-TaskFlow - Kanban Proje Yönetim Tahtası
-TaskFlow, yazılım ve tasarım ekiplerinin görevlerini kolayca takip edip yönetebilmeleri için geliştirilmiş, Trello benzeri, modern ve yüksek performanslı bir Kanban pano (board) uygulamasıdır.
+# 🚀 TaskFlow - Modern Kanban Proje Yönetimi
 
-Canlı Proje: https://taskflow-kappa-black.vercel.app
+TaskFlow; yazılım, tasarım ve organizasyon ekiplerinin süreçlerini görselleştirip hızlandırması için geliştirilmiş, yüksek performanslı ve kullanıcı dostu bir Kanban tahtası uygulamasıdır.
 
-Bu proje, Hackathon Görev Yönetim Aracı konsepti doğrultusunda 48 saatlik bir zaman diliminde sıfırdan geliştirilmiştir.
+🔗 **Canlı Önizleme:** [taskflow-kappa-black.vercel.app](https://taskflow-kappa-black.vercel.app)
 
-✨ Öne Çıkan Özellikler
-Gelişmiş Sürükle ve Bırak (Drag & Drop): Hem görev kartlarını (Card) hem de sütunları (Column) dilediğiniz gibi sürükleyip bırakabilirsiniz. Mobil cihazlarla (touch sensor) tam uyumludur.
+> **Not:** Bu proje, bir **Hackathon** kapsamında 48 saatlik sınırlı bir sürede sıfırdan geliştirilmiştir.
 
-Performans Odaklı Sıralama: Sürükle-bırak sonrası veritabanı senkronizasyonu optimize edilerek, kullanıcıya bekleme hissi yaşatmadan akıcı bir deneyim sunulur.
+---
 
-Detaylı Görev Yönetimi: Kartlara Başlık, Açıklama, Öncelik (Düşük/Orta/Yüksek), Sorumlu Kişi, Renkli Etiketler ve Teslim Tarihi eklenebilmektedir.
+## ✨ Öne Çıkan Özellikler
 
-Takvim Görünümü (Calendar View): Teslim tarihi girilmiş tüm görevler, özel bir takvim arayüzünde aşamalarına ve renklerine göre görüntülenebilir.
+- **Gelişmiş Sürükle ve Bırak:** `@dnd-kit` kullanılarak hazırlanan, hem kartların hem de sütunların yerini değiştirebileceğiniz akıcı deneyim.
+- **Detaylı Görev Yönetimi:** Kartlara başlık, açıklama, öncelik seviyesi (Düşük, Orta, Yüksek), sorumlu kişi ve renkli etiketler atama.
+- **Takvim Görünümü (Calendar View):** Teslim tarihi belirlenmiş görevlerin aylık takvim üzerinde görsel takibi.
+- **Takım İşbirliği:** Kullanıcıları e-posta adresiyle projeye davet etme ve görevlere atama.
+- **Gerçek Zamanlı Senkronizasyon:** Yapılan tüm değişiklikler anında veritabanına işlenir ve oturumlar arası korunur.
+- **Güvenli Kimlik Doğrulama:** Supabase Auth ile güvenli kayıt ve giriş sistemi.
+- **Responsive Tasarım:** Masaüstü ve mobil cihazlarla tam uyumlu arayüz.
 
-Takım Yönetimi: Sisteme kayıtlı kullanıcılar e-posta adresleri üzerinden bulunup "Takım Arkadaşı" olarak eklenebilir ve görevlere atanabilir.
+## 🛠️ Kullanılan Teknolojiler
 
-Kimlik Doğrulama (Auth): Supabase Auth destekli güvenli kayıt ve giriş sistemi.
+- **Frontend:** Next.js 15 (App Router), React, TypeScript
+- **Stilleme:** Tailwind CSS, Shadcn UI, Lucide Icons
+- **Sürükle-Bırak:** `@dnd-kit` (Core, Sortable, Modifiers)
+- **Backend & Veritabanı:** Supabase (PostgreSQL, Row Level Security)
+- **Deployment:** Vercel
 
-Offline & Fallback Desteği: Sunucu bağlantısı kurulamadığında localStorage üzerinden son durumu koruma ve veri kaybını önleme altyapısı.
+## 🚀 Kurulum ve Yerel Çalıştırma
 
-🛠️ Kullanılan Teknolojiler
-Frontend: Next.js 15 (App Router), React, TypeScript
+Projeyi kendi bilgisayarınızda çalıştırmak için:
 
-Stilleme & UI: Tailwind CSS, Lucide Icons, date-fns, shadcn/ui
+1. **Depoyu klonlayın:**
+   ```bash
+   git clone https://github.com/KULLANICI_ADIN/taskflow.git
+   cd taskflow
+Bağımlılıkları yükleyin:
 
-Drag & Drop: @dnd-kit/core, @dnd-kit/sortable
-
-Backend & Veritabanı: Supabase (PostgreSQL, Row Level Security)
-
-Deployment: Vercel
-
-🚀 Kurulum ve Çalıştırma
-Projeyi bilgisayarınızda yerel olarak çalıştırmak için aşağıdaki adımları izleyin:
-
-1. Depoyu Klonlayın
-code
-Bash
-git clone https://github.com/KULLANICI_ADIN/taskflow.git
-cd taskflow
-2. Bağımlılıkları Yükleyin
 code
 Bash
 npm install
-3. Çevresel Değişkenleri Ayarlayın
-Projenin kök dizininde .env.local dosyası oluşturun ve Supabase bilgilerinizi ekleyin:
+Çevresel değişkenleri ayarlayın:
+Kök dizinde .env.local dosyası oluşturup Supabase bilgilerinizi ekleyin:
 
 code
 Env
-NEXT_PUBLIC_SUPABASE_URL=senin_supabase_url_adresin
-NEXT_PUBLIC_SUPABASE_ANON_KEY=senin_supabase_anon_key_degerin
-4. Geliştirme Sunucusunu Başlatın
+NEXT_PUBLIC_SUPABASE_URL=senin_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=senin_supabase_key
+Geliştirme sunucusunu başlatın:
+
 code
 Bash
 npm run dev
-Teknik Mimari Kararları (Jüri İçin Notlar)
-Sürükle Bırak Kütüphanesi: Bakımı durdurulan eski kütüphaneler yerine, modern ve erişilebilir bir yapı sunan @dnd-kit tercih edilmiştir.
+🧠 Teknik Mimari Kararları
+Performans: Uygulama içerisinde Optimistic UI prensibi uygulanmıştır; kullanıcı bir kartı sürüklediğinde değişiklik arayüzde anında gerçekleşir, veritabanı senkronizasyonu arka planda asenkron olarak tamamlanır.
 
-State Yönetimi: Board state'i özel bir hook (useBoard) içerisinde merkezi olarak yönetilmektedir. Optimistic UI yaklaşımı ile sürükleme işlemi bittiği anda veritabanı cevabı beklenmeden arayüz güncellenir.
+Modüler Yapı: Board yönetimi useBoard isimli custom hook ile merkezi bir noktadan yönetilerek kod tekrarı önlenmiştir.
 
-Veritabanı Tasarımı: boards -> columns -> cards şeklinde ilişkisel bir yapı kurulmuştur. Silme işlemlerinde CASCADE DELETE kullanılarak veri bütünlüğü korunmuştur.
+Veri Güvenliği: Supabase üzerinde Row Level Security (RLS) politikaları kullanılarak, her kullanıcının sadece yetkisi olduğu verilere erişmesi sağlanmıştır.
 
-Güvenlik: Supabase üzerinde Row Level Security (RLS) politikaları aktif edilerek, kullanıcıların sadece kendi dahil oldukları panoları görmesi ve düzenlemesi sağlanmıştır.
+Erişibilirlik: Sürükle bırak işlemleri için klavye ve dokunmatik ekran desteği önceliklendirilmiştir.
+
+📜 Lisans
+Bu proje MIT Lisansı ile lisanslanmıştır. Hackathon ruhuna uygun olarak açık kaynaklıdır.
