@@ -2,6 +2,8 @@
 
 TaskFlow, yazılım ve tasarım ekiplerinin görevlerini kolayca takip edip yönetebilmeleri için geliştirilmiş, Trello benzeri, modern ve yüksek performanslı bir Kanban pano (board) uygulamasıdır. 
 
+Canlı Proje: https://taskflow-kappa-black.vercel.app
+
 Bu proje, **Hackathon Görev Yönetim Aracı** konsepti doğrultusunda 48 saatlik bir zaman diliminde sıfırdan geliştirilmiştir.
 
 ![TaskFlow Screenshot](./public/window.svg)
