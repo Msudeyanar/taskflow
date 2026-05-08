@@ -45,8 +45,31 @@ export function CardDetailModal({ card, isOpen, onClose }: CardDetailModalProps)
 
   React.useEffect(() => {
     try {
+      let members = [...defaultTeamMembers]
       const saved = localStorage.getItem('taskflow-team')
-      if (saved) setTeamMembers(JSON.parse(saved))
+      if (saved) {
+        members = JSON.parse(saved)
+      }
+      
+      const userData = localStorage.getItem('taskflow-user')
+      if (userData) {
+        const parsed = JSON.parse(userData)
+        const email = parsed.email || ''
+        const fullName = parsed.fullName || email.split('@')[0] || 'Kullanıcı'
+        
+        // Check if current user is already in members
+        if (!members.find(m => m.email === email)) {
+          members = [{
+            id: parsed.id || `admin-${Date.now()}`,
+            name: fullName + ' (Sen)',
+            email: email,
+            initials: fullName.charAt(0).toUpperCase(),
+            color: 'bg-blue-100 text-blue-600',
+            role: 'Yönetici'
+          }, ...members]
+        }
+      }
+      setTeamMembers(members)
     } catch { }
   }, [])
 

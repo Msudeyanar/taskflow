@@ -50,7 +50,7 @@ export function KanbanColumn({ column, onCardClick }: KanbanColumnProps) {
   }
 
   return (
-    <div className="flex flex-col bg-slate-100 w-[260px] sm:w-[300px] min-w-[260px] sm:min-w-[300px] rounded-xl max-h-full kanban-column-snap">
+    <div id={`column-${column.id}`} className="flex flex-col bg-slate-100 w-[260px] sm:w-[300px] min-w-[260px] sm:min-w-[300px] rounded-xl max-h-full kanban-column-snap">
       {/* Sütun Başlığı */}
       <div className="p-3 flex items-center justify-between">
         {isEditing ? (

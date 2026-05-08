@@ -43,15 +43,18 @@ export function DashboardHeader() {
     const allCards = board.columns.flatMap(col => col.cards)
     const totalCards = allCards.length
 
-    const doneCol = board.columns.find(col =>
-      col.title.toLowerCase().includes('bitti') || col.title.toLowerCase().includes('done')
-    )
-    const todoCol = board.columns.find(col =>
-      col.title.toLowerCase().includes('yapılacak') || col.title.toLowerCase().includes('to do')
-    )
-    const inProgressCol = board.columns.find(col =>
-      col.title.toLowerCase().includes('yapılıyor') || col.title.toLowerCase().includes('progress')
-    )
+    const doneCol = board.columns.find(col => {
+      const lower = col.title.toLowerCase();
+      return lower.includes('bitti') || lower.includes('done') || lower.includes('tamamlandı') || lower.includes('tamamlanan');
+    })
+    const todoCol = board.columns.find(col => {
+      const lower = col.title.toLowerCase();
+      return lower.includes('yapılacak') || lower.includes('to do') || lower.includes('bekleyen');
+    })
+    const inProgressCol = board.columns.find(col => {
+      const lower = col.title.toLowerCase();
+      return lower.includes('yapılıyor') || lower.includes('progress') || lower.includes('devam eden') || lower.includes('süren');
+    })
 
     const doneCount = doneCol?.cards.length || 0
     const todoCount = todoCol?.cards.length || 0
@@ -71,7 +74,11 @@ export function DashboardHeader() {
       return due >= today && due <= threeDaysLater
     }).length
 
-    return { totalCards, doneCount, todoCount, inProgressCount, otherCount, upcomingCount }
+    return { 
+      totalCards, doneCount, todoCount, inProgressCount, otherCount, upcomingCount,
+      doneColId: doneCol?.id,
+      inProgressColId: inProgressCol?.id
+    }
   }, [board])
   const [currentUser, setCurrentUser] = useState<{ fullName: string; email: string } | null>(null)
   const [members, setMembers] = useState(defaultTeamMembers)
@@ -96,6 +103,30 @@ export function DashboardHeader() {
       }
     } catch { }
   }, [])
+
+  const scrollToColumn = (colId?: string) => {
+    if (!colId) return;
+    setShowSummary(false);
+    setView('kanban');
+    
+    // Poll for the element in case React needs time to render
+    let attempts = 0;
+    const findAndScroll = () => {
+      const colElement = document.getElementById(`column-${colId}`);
+      if (colElement) {
+        colElement.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        colElement.classList.add('ring-4', 'ring-blue-400', 'transition-all', 'duration-500');
+        setTimeout(() => {
+          colElement.classList.remove('ring-4', 'ring-blue-400');
+        }, 1500);
+      } else if (attempts < 10) {
+        attempts++;
+        setTimeout(findAndScroll, 50);
+      }
+    };
+    
+    setTimeout(findAndScroll, 50);
+  }
 
   // Dış tıklamada kapat
   useEffect(() => {
@@ -529,15 +560,6 @@ export function DashboardHeader() {
 
             {/* İstatistik Kartları */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
-              <div className="bg-emerald-50 border border-emerald-100 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <CheckCircle2Icon className="w-5 h-5 text-emerald-500" />
-                  <span className="text-[11px] text-emerald-600 font-semibold uppercase tracking-wider">Tamamlanan</span>
-                </div>
-                <p className="text-2xl font-bold text-emerald-700">{summaryStats.doneCount}</p>
-                <p className="text-[11px] text-emerald-500 mt-0.5">öğe tamamlandı</p>
-              </div>
-
               <div className="bg-blue-50 border border-blue-100 rounded-xl p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <ClipboardListIcon className="w-5 h-5 text-blue-500" />
@@ -547,13 +569,18 @@ export function DashboardHeader() {
                 <p className="text-[11px] text-blue-500 mt-0.5">öğe oluşturuldu</p>
               </div>
 
-              <div className="bg-amber-50 border border-amber-100 rounded-xl p-4">
-                <div className="flex items-center gap-2 mb-2">
-                  <PencilLineIcon className="w-5 h-5 text-amber-500" />
-                  <span className="text-[11px] text-amber-600 font-semibold uppercase tracking-wider">Devam Eden</span>
+              <div 
+                onClick={() => summaryStats.inProgressColId && scrollToColumn(summaryStats.inProgressColId)}
+                className={`bg-amber-50 border border-amber-100 rounded-xl p-4 flex flex-col justify-between transition-all duration-200 ${summaryStats.inProgressColId ? 'cursor-pointer hover:shadow-md hover:-translate-y-0.5 hover:bg-amber-100/50' : ''}`}
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <PencilLineIcon className="w-5 h-5 text-amber-500" />
+                    <span className="text-[11px] text-amber-600 font-semibold uppercase tracking-wider">Devam Eden</span>
+                  </div>
+                  <p className="text-2xl font-bold text-amber-700">{summaryStats.inProgressCount}</p>
+                  <p className="text-[11px] text-amber-500 mt-0.5">öğe yapılıyor</p>
                 </div>
-                <p className="text-2xl font-bold text-amber-700">{summaryStats.inProgressCount}</p>
-                <p className="text-[11px] text-amber-500 mt-0.5">öğe yapılıyor</p>
               </div>
 
               <div className="bg-rose-50 border border-rose-100 rounded-xl p-4">
@@ -563,6 +590,20 @@ export function DashboardHeader() {
                 </div>
                 <p className="text-2xl font-bold text-rose-700">{summaryStats.upcomingCount}</p>
                 <p className="text-[11px] text-rose-500 mt-0.5">bitiş tarihi yakın</p>
+              </div>
+
+              <div 
+                onClick={() => summaryStats.doneColId && scrollToColumn(summaryStats.doneColId)}
+                className={`bg-emerald-50 border border-emerald-100 rounded-xl p-4 flex flex-col justify-between transition-all duration-200 ${summaryStats.doneColId ? 'cursor-pointer hover:shadow-md hover:-translate-y-0.5 hover:bg-emerald-100/50' : ''}`}
+              >
+                <div>
+                  <div className="flex items-center gap-2 mb-2">
+                    <CheckCircle2Icon className="w-5 h-5 text-emerald-500" />
+                    <span className="text-[11px] text-emerald-600 font-semibold uppercase tracking-wider">Tamamlanan</span>
+                  </div>
+                  <p className="text-2xl font-bold text-emerald-700">{summaryStats.doneCount}</p>
+                  <p className="text-[11px] text-emerald-500 mt-0.5">öğe tamamlandı</p>
+                </div>
               </div>
             </div>
 
