@@ -6,7 +6,6 @@ Canlı Proje: https://taskflow-kappa-black.vercel.app
 
 Bu proje, **Hackathon Görev Yönetim Aracı** konsepti doğrultusunda 48 saatlik bir zaman diliminde sıfırdan geliştirilmiştir.
 
-![TaskFlow Screenshot](./public/window.svg)
 
 ## ✨ Öne Çıkan Özellikler
 
